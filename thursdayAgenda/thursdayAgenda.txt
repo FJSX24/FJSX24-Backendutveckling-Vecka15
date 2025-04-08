@@ -1,0 +1,201 @@
+🧭 Workshop – Torsdag v.15
+Datum: 2025-04-10
+Tid: 09.00–12.00
+Plats: Ordinarie schema
+Ämne: Middleware i Express
+
+----------------------------------------
+✨ Syfte
+Förstå vad middleware är i Express, varför det används och hur man skapar egen middleware. Introducera `app.use()` och `next()`. Samt förmågan att implementera avancerade lösningar för loggning, säkerhet och kontrollflöde i Express. Introducera Winston, Morgan, samt rate limiting och autentisering via API-nycklar.
+
+----------------------------------------
+🎯 Kursmål
+K1: Förklara hur Express använder middleware
+
+F1: Skapa och använda middleware för logging och error handling
+
+----------------------------------------
+🧠 Agenda
+
+🎓 Teori & PowerPoint:	Vad är middleware, kedjan, next, app.use(), tredjepartsverktyg, loggning, säkerhet
+
+💻 Code-Along:	Logger och error-middleware, testa i Postman
+
+🔧 Självständiga övningar:
+
+🧪 Test & Reflektion:	Diskutera skillnader mellan route-middleware och global
+
+🧳 Code review & feedback:	Visa upp egna middleware-lösningar
+
+----------------------------------------
+----------------------------------------
+----------------------------------------
+🧠 Teori (30 min)
+
+- Vad är middleware?
+- Vanliga användningsområden: loggning, validering, auth, error handling
+- Genomgång av `app.use()`, `next()`, samt middleware-kedjan
+
+"God morgon! Idag ska vi titta närmare på en viktig del av Express – nämligen middleware. Middleware fungerar som ett lager mellan inkommande request och det slutliga svaret. Ni kommer lära er att logga inkommande requests, validera data innan det når en route, och hantera fel globalt. Vi kommer även att bygga egna middlewarefunktioner och förstå hur de kopplas in i flödet."
+
+"Vi kommer att jobba praktiskt med `app.use()`, `next()`, loggning av headers och anrop, samt skapa en `error handler` som fångar upp fel och svarar snyggt till klienten. Allt detta ger er större kontroll och säkerhet i era API:er."
+
+🖥️ PowerPoint-innehåll: Middleware i Express
+
+Slide 1 – Vad är Middleware?
+
+Text på sliden:
+
+Funktion som körs mellan request och response
+
+Har tillgång till req, res och next
+
+Kan användas för: autentisering, validering, loggning, felhantering och mycket mer.
+
+Talarmanus: "Alla middleware körs i den ordning de definieras. next() hoppar till nästa middleware eller route. Om du glömmer next(), fastnar kedjan.
+
+Middleware är funktioner som körs mellan det att en förfrågan kommer in och innan ett svar skickas tillbaka. De kan logga information, manipulera request- eller response-objektet, och till och med stoppa eller omdirigera flödet."
+
+----------------------------------------
+Slide 2: Varför använda Middleware?
+
+"Genom att använda middleware kan vi strukturera vår applikationslogik på ett mer modulärt sätt. Istället för att ha all logik samlad på en plats kan vi dela upp funktionaliteten i separata moduler. Detta gör applikationen mer återanvändbar och lättare att underhålla."
+
+Talarmanus: "Alla middleware-funktioner tar tre argument – req, res och next. next() är avgörande – den säger 'gå vidare till nästa middleware eller route'. Glömmer vi det? Då fastnar servern."
+Exekveras i den ordning de definieras
+
+----------------------------------------
+Slide 3: Middleware i Express.js
+
+"I Express använder vi funktionen app.use() för att lägga till middleware i vår applikation. Ett vanligt exempel är app.use(express.json()), som gör det möjligt att hantera JSON-data i inkommande requests. Middleware kan också användas för att manipulera både request- och response-objekt."
+
+----------------------------------------
+Slide 4: Typer av Middleware (Ny)
+
+"Det finns flera typer av middleware i Express:
+
+Inbyggda middleware - Tillhandahålls av Express, t.ex. express.json().
+
+Användardefinierade middleware - Skapade av oss själva för specifika syften.
+
+Tredjeparts middleware - Exempelvis morgan för loggning. Middleware kan kedjas i en pipeline där varje middleware anropar next() för att övergå till nästa steg."
+
+
+----------------------------------------
+Slide 5 – Error Handling Middleware
+
+Talarmanus: För felhantering används en speciell typ av middleware med fyra argument – err, req, res, next. Om ett fel skickas vidare med next(err), fångas det här.
+
+----------------------------------------
+----------------------------------------
+----------------------------------------
+💻 Code-Along 
+
+💡 Mål:
+Förstå hur man bygger avancerade middleware-funktioner.
+
+Lära sig använda både inbyggd och tredjeparts-middleware.
+
+Bygga en komplett logging- och felhanteringslösning.
+
+Lära sig hur middleware-kedjan fungerar.
+
+🗣️ Talarmanus - Introduktion:
+"Hej allihopa! Idag ska vi dyka ner i världen av middleware i Express.js. Vi kommer att bygga en robust applikation som hanterar logging, felhantering och räknar antalet requests. För att göra detta ska vi använda några kraftfulla bibliotek och skapa egna middlewarefunktioner.
+
+Men innan vi börjar koda, låt oss snabbt prata om de verktyg vi kommer att använda idag:"
+
+📚 Bibliotek vi använder idag
+
+📝 Morgan
+"Morgan är ett HTTP-requestloggeringsbibliotek för Node.js. Det fungerar som en middleware och loggar alla inkommande requests till konsolen. Det är användbart för att snabbt få en överblick av trafiken i applikationen. Vi använder Morgan för enkel och automatisk loggning av inkommande requests."
+
+🪓 Winston
+"Winston är ett flexibelt och mångsidigt loggningsbibliotek för Node.js. Det är byggt för att hantera både loggning i konsolen och loggning till filer. Vi använder Winston för att skapa en centraliserad loggning som både skrivs ut till terminalen och sparas i en fil. Det gör det lätt att granska applikationens beteende i efterhand."
+
+🗣️ Talarmanus - Code-Along Start:
+"Nu när vi har koll på vilka bibliotek vi kommer att använda, är det dags att sätta igång med kodningen! Vi kommer att strukturera vårt projekt och bygga det steg för steg. Häng med och ställ gärna frågor under tiden!"
+
+
+1. Projektuppsättning
+🗣️ Talarmanus: "Först skapar vi en ny mapp för projektet och initierar ett npm-projekt. Vi installerar också de bibliotek vi behöver: Express för själva servern, Morgan för enkel request-loggning och Winston för mer avancerad logghantering."
+
+npm init -y
+npm install express morgan winston
+touch index.js
+
+2. Projektstruktur
+🗣️ Talarmanus: "För att hålla koden organiserad skapar vi en mapp för våra middleware och en för loggfiler. Vi skapar också några filer där vi definierar våra middleware."
+
+📝 Middleware: Logger (Winston)
+🗣️ Talarmanus: "Vi börjar med att bygga vår loggningsmiddleware med hjälp av Winston. Detta kommer att ge oss loggar både i terminalen och i en fil. Loggning är viktigt för att hålla koll på applikationens aktivitet och eventuella problem."
+
+middleware/logger.js
+
+Genomför den koden.
+
+🗣️ Talarmanus:
+"Här har vi en middleware som använder Winston för att skapa en loggfil som både visar tidpunkt, loggningsnivå och meddelande. Vi använder också console-transport för att få ut loggarna direkt i terminalen. Varje request som kommer in loggas automatiskt med HTTP-metod och URL."
+
+📝 Middleware: Felhantering
+🗣️ Talarmanus: "För att hantera fel i applikationen på ett centralt sätt skapar vi en felhanteringsmiddleware. Denna middleware fångar upp fel och loggar dem med Winston, samtidigt som vi skickar ett standardiserat svar till klienten."
+
+middleware/errorHandler.js
+
+Genomför den koden.
+
+🗣️ Talarmanus:
+"Felhanteringsmiddleware har fyra parametrar: err, req, res och next. När något går fel, loggar vi felet och skickar tillbaka ett standardiserat felmeddelande till klienten. Det gör det lättare att förstå vad som gick snett."
+
+📝 Middleware: Request Counter
+🗣️ Talarmanus: "Vi skapar också en middleware som räknar antalet inkommande requests. Detta är användbart för att hålla koll på hur många anrop vår server hanterar."
+
+middleware/requestCounter.js
+
+Genomför den koden.
+
+Huvudfilen: server.js
+
+🗣️ Talarmanus: "Nu sätter vi ihop allting i vår huvudfil. Vi kopplar ihop alla middleware och sätter upp några routes för att testa."
+
+Genomför den koden.
+
+----------------------------------------
+----------------------------------------
+----------------------------------------
+🗣️ Talarmanus - Testning:
+"Nu är vi redo att testa applikationen. Vi startar servern med node server.js och öppnar webbläsaren på http://localhost:3000/. Vi kan också besöka http://localhost:3000/error för att simulera ett fel. Loggfilerna skapas i mappen logs/, och vi kan granska dem med kommandot tail -f logs/combined.log."
+
+Starta servern:
+node server.js
+
+Testa endpoints:
+
+http://localhost:3000/ → Kolla loggar och räknare.
+
+http://localhost:3000/error → Simulerar ett serverfel.
+
+Kontrollera loggfiler i mappen logs/:
+
+💡 Vad har vi lärt oss?
+Hur man använder tredjepartsloggning med winston.
+
+Hur man skapar en anpassad middleware för request-logging.
+
+Hur man hanterar fel globalt med en dedikerad middleware.
+
+Hur man implementerar en middleware för att räkna antal inkommande requests
+
+----------------------------------------
+----------------------------------------
+----------------------------------------
+⚖️ Dags för övningar
+
+----------------------------------------
+🧳 Gruppdiskussion 
+
+Varför är det viktigt att använda middleware i en Express-applikation och när bör man använda middleware?
+
+Hur skulle ni kunna använda felhanteringsmiddleware i en produktionsmiljö?
+
+Vad är fördelen med att skapa egen middleware istället för att använda tredjepartsbibliotek?

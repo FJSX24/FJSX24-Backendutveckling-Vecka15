@@ -1,0 +1,18 @@
+{
+  "name": "fjsx24-backendutveckling-vecka15",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Intro till Node js, Express, API och middleware del 2",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0"
+  }
+}

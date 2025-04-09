@@ -93,6 +93,7 @@ Om kortare: 400 Bad Request + error
 
 -------------------------------------------
 13:  /api/ping
+
 Returnera ett svar med statuskod 200 och en custom header:
 res.setHeader("X-Server-Status", "active");
 res.status(200).json({ message: "Pong!" });

@@ -103,3 +103,288 @@ Bonus: Implementera en mer avancerad lösning med Redis för att hantera fler kl
 🛠️ Middleware som returnerar 404 och ett meddelande.
 
 ✔️ Ska ligga efter alla andra routes
+
+-------------------------------------------
+-------------------------------------------
+-------------------------------------------
+Övnings instruktioner för min code along:
+
+🧪 Övning – Bygg ett Middleware-bibliotek i Express
+Nivå: Svår
+Tidsåtgång: 2–3 timmar
+Syfte: Förstå vad middleware är och hur det används för att strukturera och förbättra backendlogik i en Express-applikation.
+
+ Bakgrund
+Du är backendutvecklare i ett team som bygger ett API till en ny SaaS-produkt. 
+
+Chefen vill kunna se alla anrop som kommer in (loggning), ha koll på hur många gånger API:et används (räknare) och att tjänsten inte kraschar vid fel (felhantering). Vi ska nu bygga in dessa funktioner i vår Express-server.:
+
+
+Att dina middelwares ska inte blandas in direkt i route-filer – det ska hållas snyggt, modulärt och professionellt.
+
+Ditt uppdrag är att bygga detta med hjälp av egna middleware-funktioner i Express.
+
+- Logga alla inkommande requests
+Mål: Skapa ett system som loggar alla inkommande HTTP-anrop med metod och URL.
+
+📌 Instruktioner:
+
+Utforska winston-paketet och skapa en logger som:
+
+Skriver loggar till både terminalen och en loggfil
+
+Inkluderar datum, nivå och meddelande
+
+Skapa en middleware-funktion som:
+
+Tar emot varje inkommande request
+
+Loggar metoden och URL
+
+Går vidare med next()
+
+📂 Placera i: middleware/logger.js
+
+🧠 Tips: Läs dokumentationen för winston → https://github.com/winstonjs/winston
+
+
+- Få koll på hur många requests som API:t får
+Mål: Håll koll på hur många requests servern fått sedan start.
+
+📌 Instruktioner:
+
+Skapa en variabel requestCount (utanför middleware-funktionen) som räknar varje request.
+
+Logga den aktuella siffran i terminalen vid varje anrop.
+
+Använd next() för att gå vidare i middleware-kedjan.
+
+📂 Placera i: middleware/requestCounter.js
+
+
+- Få bättre felmeddelanden
+Mål: Kunna fånga och logga serverfel, och svara med ett JSON-felmeddelande till klienten.
+
+📌 Instruktioner:
+
+Skapa en middleware som tar emot 4 argument: err, req, res, next
+
+Logga felet som "error"-nivå med din winston-logger
+
+Svara med en statuskod 500 och ett JSON-objekt med:
+{
+  "error": "Serverfel",
+  "message": "Det här är felet som uppstod..."
+}
+
+📂 Placera i: middleware/errorHandler.js
+
+
+- Skriva loggar både till konsol och till fil
+
+Använd alla middleware i server.js 
+Importera Express, dina tre middleware och morgan.
+
+Använd app.use() för att:
+
+Aktivera morgan("dev") först (för att se skillnad)
+
+Använd din egen logger
+
+Använd din request counter
+
+Skapa två routes:
+
+GET / → Returnera "hello middleware"
+
+GET /error → Kasta ett fel med throw new Error("Något gick fel")
+
+Placera errorHandler sist i kedjan med app.use().
+
+
+- Testa allt! 
+Anropa / flera gånger → se både morgan och winston-loggar.
+
+Anropa /error → se att fel loggas och rätt JSON svar skickas.
+
+Kolla att combined.log uppdateras.
+
+
+---------------------------------------
+---------------------------------------
+---------------------------------------
+✅ Vad förväntas av en nyexaminerad Fullstack/JavaScript-utvecklare (YH-nivå)?
+
+Här är en sammanställning av branschens generella förväntningar för en junior fullstackutvecklare med inriktning på JavaScript (React + Node.js):
+
+🧠 Grundläggande kunskaper – förväntas kunna:
+JavaScript (ES6+) – variabler, funktioner, objekt, arraymetoder, promises, async/await, map, filter, reduce, destructuring,
+
+HTML & CSS – semantik, formulär, Flexbox/Grid, responsiv design, media queries, WCAG basics
+
+React (eller annat liknande bibliotek) – komponentstruktur, props, state, hooks (useEffect, useState), Global state
+
+Node.js + Express – skapa API:er, routing, middleware, error handling, Miljövariabler, dotenv
+
+Databaser – grundläggande CRUD med SQL (PostgreSQL, MySQL) eller NoSQL (MongoDB)
+
+REST API-koncept – HTTP-metoder, statuskoder, request/response
+
+Git & GitHub – commits, branches, pull requests, merge conflicts
+
+JSON och API-anrop – förstå fetch, async flöden
+
+🛠 Verktyg & miljö – grundläggande förståelse av:
+Postman / Insomnia (API-testning)
+
+NPM & package.json
+
+Miljövariabler och .env-filer
+
+Enkel felsökning i DevTools
+
+🤝 Arbetssätt – nybörjarnivå men förståelse för:
+Scrum / Kanban / Agila metoder
+
+Sprintplanering, standups, retros
+
+Att jobba i team, code reviews och pull requests
+Kan arbeta i grupp med GitHub-flöden (issue → branch → PR)
+
+----------------------------------
+🟡 Vad som INTE förväntas av en junior (men ofta missförstås som "måste kunna"):
+❌ Bygga stora, skalbara appar från grunden
+❌ Kunna GraphQL, WebSockets, Docker, CI/CD
+❌ Avancerad autentisering med OAuth2
+❌ Kunna flera databaser
+❌ Ha full koll på säkerhet, DevOps, eller test coverage
+❌ Bygga perfekt UI/UX enligt Figma-mockups
+
+➡ Men: en förståelse för grunderna i dessa räcker långt.
+----------------------------------
+🎭 Simulerad anställningsprocess – Junior Fullstackutvecklare
+
+Här är en realistisk rekryteringsprocess (speciellt för första jobbet efter YH-utbildning):
+
+🧾 1. Ansökan / screening
+Du skickar in:
+
+CV
+
+Länk till GitHub
+
+Länk till portfolio/projekt/demo
+
+👉 Tips: GitHub-aktivitet väger tungt (projekt med README, issues, branches)
+
+📞 2. Telefon-/videointervju (30–45 min)
+Syfte: Kolla din motivation, samarbetsförmåga, förståelse för teknik
+
+Exempel på frågor:
+
+“Berätta om ett projekt du är stolt över.”
+
+“Vad gör du när du fastnar?”
+
+“Hur testar du att ett API fungerar?”
+
+“Vad är skillnaden på GET och POST?”
+
+“Vad är ett promise?”
+
+💻 3. Kodtest – exempel (60–90 min)
+🟢 Nivå: junior
+🧪 Syfte: Visa logiskt tänkande, grundläggande syntax, API-hantering, arraymanipulation
+
+Kodtest-exempel:
+Du ska bygga ett mini-API i Express med två endpoints:
+
+GET /notes – returnerar en array av anteckningar (existerar i minnet)
+
+POST /notes – tar emot ett JSON-objekt { title, content } och lägger till i arrayen
+
+✅ Validera att title och content inte är tomma.
+✅ Returnera 400 om något saknas.
+✅ Returnera den uppdaterade listan efter att en anteckning lagts till.
+
+Bonus: Lägg till en middleware som loggar IP och endpoint på varje request.
+
+👉 Poängen ligger inte i perfekt lösning – utan i:
+
+Har de förstått req.body, res.status()?
+
+Har de läst instruktionen?
+
+Har de strukturerat koden logiskt?
+
+🤝 4. Live intervju (teknisk + kulturell, 45–60 min)
+Syfte: Prata om kodtestet, deras process och tänk.
+Frågor:
+
+“Vad var svårt i testet?”
+
+“Varför gjorde du så här?”
+
+“Hur hade du löst det annorlunda med mer tid?”
+
+------------------------------
+👩‍💻 Kodtest: Backend – Express API + Middleware
+💡 Uppdrag:
+Bygg ett API för att hantera användare.
+
+🧪 Kravspecifikation:
+Endpoints:
+
+GET /api/users → returnerar alla användare
+
+POST /api/users → lägger till en ny användare
+
+validera att name finns och är minst 3 tecken
+
+GET /api/users/:id → returnerar en enskild användare
+
+DELETE /api/users/:id → tar bort en användare
+
+Middleware:
+
+En middleware ska logga req.method, req.url och tidpunkt
+
+En error handler som returnerar JSON + 500
+
+Extra poäng:
+
+Spara data till en JSON-fil med fs.promises
+
+Använd miljövariabler för PORT
+
+🛠 Stack:
+Node.js, Express, valfritt lagringsformat (minne eller fil)
+----------------------------------
+👨‍🎨 Kodtest: Frontend – React + Global State + Fetch
+💡 Uppdrag:
+Bygg ett frontend-gränssnitt för att hantera användarlistan från backend-testet ovan.
+
+🧪 Kravspecifikation:
+Visa användare:
+
+Hämta data från /api/users och visa i en lista
+
+Visa “Laddar...” tills datan är hämtad
+
+Lägg till användare:
+
+Form med input för name
+
+POST:a till /api/users och uppdatera listan lokalt
+
+Global state:
+
+Använd Context API eller Redux Toolkit för att spara användarlistan
+
+Skapa en Provider som hanterar fetch + state
+
+Extra poäng:
+
+Radera användare
+
+Använd react-router för att visa detaljerad vy för en användare (/users/:id)
